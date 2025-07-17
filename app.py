@@ -14,7 +14,7 @@ SECRET = os.getenv("JWT_SECRET", "CHANGE_ME")   # export JWT_SECRET=reallyrandom
 ALGO   = "HS256"
 TTL    = timedelta(hours=8)
 security = HTTPBearer()
-CURRENT_VERSION = "0.1.6"
+CURRENT_VERSION = "0.1.60"
 VALID_TOOLS = {"wholefoods", "safeway", "harristeeter", "giantscale"}
 
 
