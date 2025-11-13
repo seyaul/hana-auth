@@ -3,4 +3,5 @@ uvicorn[standard]
 aiosqlite
 python-jose[cryptography]
 passlib[bcrypt]
+bcrypt==4.1.3
 python-multipart==0.0.9

@@ -91,6 +91,10 @@ import sqlite3
 
 async def _create_user(name: str, pw: str, role: str = "user"):
     try:
+        # bcrypt has a 72-byte limit on passwords
+        if len(pw.encode('utf-8')) > 72:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Password too long (max 72 bytes)")
+
         async with aiosqlite.connect(DB) as db:
             await db.execute(
                 "INSERT INTO users (id, name, hash, password, role) VALUES (?,?,?,?,?)",
@@ -108,11 +112,24 @@ async def delete_user(name):
         await db.commit()
 
 async def _verify(name: str, pw: str) -> bool:
-    async with aiosqlite.connect(DB) as db:
-        cur = await db.execute("SELECT hash FROM users WHERE name=?", (name,))
-        row = await cur.fetchone()
-        await cur.close()
-    return row and bcrypt.verify(pw, row[0])
+    try:
+        async with aiosqlite.connect(DB) as db:
+            cur = await db.execute("SELECT hash FROM users WHERE name=?", (name,))
+            row = await cur.fetchone()
+            await cur.close()
+
+        if not row:
+            return False
+
+        # bcrypt has a 72-byte limit on passwords
+        if len(pw.encode('utf-8')) > 72:
+            return False
+
+        return bcrypt.verify(pw, row[0])
+    except (ValueError, Exception) as e:
+        # Log the error for debugging (optional)
+        print(f"Verification error for user {name}: {type(e).__name__}: {e}")
+        return False
 
 def jwt_token(sub):
     now = datetime.now(timezone.utc)
