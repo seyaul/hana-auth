@@ -38,13 +38,9 @@ def update_server_version(version, changelog):
         f'CURRENT_VERSION = "{version}"',
         content
     )
-    
-    # Update download URL to point to zip file
-    content = re.sub(
-        r'download/v[^/]*/HanaTool[^"]*\.exe',
-        f'download/v{version}/HanaTool-{version}.zip',
-        content
-    )
+
+    # Note: download_url in app.py uses f-string with CURRENT_VERSION variable,
+    # so it will automatically update when CURRENT_VERSION changes
     
     # Update release date
     today = datetime.now().strftime("%Y-%m-%d")
