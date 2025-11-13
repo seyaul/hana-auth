@@ -14,7 +14,7 @@ SECRET = os.getenv("JWT_SECRET", "CHANGE_ME")   # export JWT_SECRET=reallyrandom
 ALGO   = "HS256"
 TTL    = timedelta(hours=8)
 security = HTTPBearer()
-CURRENT_VERSION = "0.1.66"
+CURRENT_VERSION = "0.1.65"
 VALID_TOOLS = {"wholefoods", "safeway", "harristeeter", "giantscale"}
 
 
@@ -188,7 +188,7 @@ def get_version():
         "download_url": f"https://github.com/seyaul/Scrapling/releases/download/v{CURRENT_VERSION}/HanaTool-{CURRENT_VERSION}.zip",  # Changed to .zip
         "release_date": "2025-11-13",
         "required": False,
-        "changelog": "Test deployment script"
+        "changelog": "Update: Price History Management v1"
     }
 
 import shutil, uuid
